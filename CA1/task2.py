@@ -1,8 +1,14 @@
 from utils import TEST_TRACTS
 from task1 import calc_support
+from utils import (
+    TEST_TRACTS,
+    ItemsetsCountsType,
+    ItemsetsType,
+    TransactionsType,
+)
 
 
-def get_sorted_items(tracts: list[frozenset]) -> list:
+def get_sorted_items(tracts: TransactionsType) -> list:
     """get items from transactions and sort by support counting
 
     Args:
@@ -12,13 +18,13 @@ def get_sorted_items(tracts: list[frozenset]) -> list:
         list: items which sorted by support counting
     """
     # get unique items
-    items: list[str] = []
+    items = []
     for tract in tracts:
         items.extend(list(tract))
     unique_items = set(items)
 
     # count support
-    counts: list[tuple[str, int]] = []
+    counts = []
     for item in unique_items:
         sup = calc_support(set(item), tracts)
         counts.append((item, sup))
@@ -33,14 +39,17 @@ def get_sorted_items(tracts: list[frozenset]) -> list:
     return items
 
 
-def convert_items2itemsets(items: list) -> list[set]:
-    itemsets: list[set] = []
+def convert_items2itemsets(items: list) -> ItemsetsType:
+    itemsets = []
     for item in items:
         itemsets.append(set([item]))
     return itemsets
 
 
-def gen_candidates(frequent_itemsets: list[set], items: list) -> list[set]:
+def gen_candidates(
+    frequent_itemsets: ItemsetsType,
+    items: list,
+) -> ItemsetsType:
     """generate candidates from frequent itemsets and unique frequent items
 
     Args:
@@ -63,9 +72,9 @@ def gen_candidates(frequent_itemsets: list[set], items: list) -> list[set]:
 
 
 def prune_candidates(
-    candidates: list[set],
-    prev_pruned_itemsets: list[set],
-) -> tuple[list[set], list[set]]:
+    candidates: ItemsetsType,
+    prev_pruned_itemsets: ItemsetsType,
+) -> tuple[ItemsetsType, ItemsetsType]:
     """Prune itemsets that violate downward closure
 
     Args:
