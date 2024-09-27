@@ -6,6 +6,7 @@ README.md
 *.names
 *.bininfo
 *.csv
+*.pickle
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
