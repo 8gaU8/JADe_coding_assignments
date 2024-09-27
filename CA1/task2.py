@@ -103,9 +103,16 @@ def prune_candidates(
     return not_pruned, pruned
 
 
+def extract_itemsets(itemsets_counts: ItemsetsCountsType) -> ItemsetsType:
+    def get_0th(s):
+        return s[0]
+
+    return list(map(get_0th, itemsets_counts))
+
+
 def get_frequent_itemsets(
-    not_pruned: list[set], tracts: list[frozenset], min_supp: int
-) -> tuple[list[set], list[set]]:
+    not_pruned: ItemsetsType, tracts: TransactionsType, min_supp: int
+) -> tuple[ItemsetsCountsType, ItemsetsCountsType]:
     """count support of each itemset that survived from pruning
 
     Args:
@@ -121,9 +128,9 @@ def get_frequent_itemsets(
     for itemset in not_pruned:
         supp = calc_support(itemset, tracts)
         if supp >= min_supp:
-            frequent_itemsets.append(itemset)
+            frequent_itemsets.append((itemset, supp))
         else:
-            non_frequent_itemsets.append(itemset)
+            non_frequent_itemsets.append((itemset, supp))
     return frequent_itemsets, non_frequent_itemsets
 
 
