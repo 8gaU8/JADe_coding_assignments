@@ -25,7 +25,7 @@ def get_sorted_items(tracts: TransactionsType) -> list:
     # count support
     counts = []
     for item in unique_items:
-        sup = calc_support(set(item), tracts)
+        sup = calc_support(set([item]), tracts)
         counts.append((item, sup))
 
     # sort with support and get only items
