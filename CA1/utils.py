@@ -8,7 +8,7 @@ def get_transactions(dataset: str) -> tuple[list, list]:
     FUNC_MAP = {
         "data_txt": load_data_txt,
         "matrix": load_matrix,
-        "tans_txt": load_trans_txt,
+        "trans_txt": load_trans_txt,
     }
     if DATASETS.get(dataset, None) is None:
         raise ValueError(f"no such dataset {dataset}")
