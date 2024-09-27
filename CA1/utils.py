@@ -28,3 +28,8 @@ TEST_TRACTS = [
     frozenset(["a", "b", "c", "d"]),
     frozenset(["a", "d"]),
 ]
+
+# typings
+ItemsetsCountsType = list[tuple[set, int]]
+ItemsetsType = list[set]
+TransactionsType = list[frozenset]
