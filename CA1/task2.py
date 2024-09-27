@@ -1,4 +1,3 @@
-from utils import TEST_TRACTS
 from task1 import calc_support
 from utils import (
     TEST_TRACTS,
@@ -134,35 +133,39 @@ def get_frequent_itemsets(
     return frequent_itemsets, non_frequent_itemsets
 
 
-def main():
-    items = get_sorted_items(TEST_TRACTS)
-    assert items == ["d", "a", "b", "c"]
-    print(f"{items = }")
-
+def apriori(tracts: TransactionsType, min_supp: int) -> ItemsetsCountsType:
     frequent_itemsets = []
 
-    items = get_sorted_items(TEST_TRACTS)
+    items = get_sorted_items(tracts)
     itemsets = convert_items2itemsets(items)
-
-    candidates = gen_candidates(itemsets, items)
-    candidates, pruned = prune_candidates(candidates, list())
-    fi, non_fi = get_frequent_itemsets(candidates, TEST_TRACTS, 2)
-    pruned.extend(non_fi)
+    fi, non_fi = get_frequent_itemsets(itemsets, tracts, min_supp)
     frequent_itemsets.extend(fi)
+    pruned = []
 
-    candidates = gen_candidates(fi, items)
-    candidates, pruned = prune_candidates(candidates, pruned)
-    fi, non_fi = get_frequent_itemsets(candidates, TEST_TRACTS, 2)
-    pruned.extend(non_fi)
-    frequent_itemsets.extend(fi)
+    while len(fi) != 0:
+        candidates = gen_candidates(extract_itemsets(fi), items)
+        candidates, pruned = prune_candidates(candidates, pruned)
+        fi, non_fi = get_frequent_itemsets(candidates, tracts, min_supp)
+        pruned.extend(extract_itemsets(non_fi))
+        frequent_itemsets.extend(fi)
 
-    candidates = gen_candidates(fi, items)
-    candidates, pruned = prune_candidates(candidates, pruned)
-    fi, non_fi = get_frequent_itemsets(candidates, TEST_TRACTS, 2)
-    pruned.extend(non_fi)
-    frequent_itemsets.extend(fi)
-    # ! サポート数を出力する
-    print(f"{frequent_itemsets = }")
+    return frequent_itemsets
+
+
+def show_itemsets(itemsets_counts: ItemsetsCountsType) -> None:
+    sorted_item = []
+    for fi, count in itemsets_counts:
+        if len(fi) == 1:
+            sorted_item.append((list(fi)[0], count))
+    count_map = dict(sorted_item)
+    for fi, count in itemsets_counts:
+        fi = sorted(list(fi), key=lambda s: -count_map[s])
+        print(f"itemsets = {fi}, supp = {count}")
+
+
+def main():
+    frequent_itemsets = apriori(TEST_TRACTS, 2)
+    show_itemsets(frequent_itemsets)
 
 
 if __name__ == "__main__":
