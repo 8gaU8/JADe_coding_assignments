@@ -62,15 +62,17 @@ def gen_candidates(
     Returns:
         list[set]: next candidates of frequent itemsets
     """
-    candidates = []
+    candidates = set()
     for fi in frequent_itemsets:
         for item in items:
             if item in fi:
                 continue
             candidate = fi.copy()
             candidate.add(item)
-            if candidate not in candidates:
-                candidates.append(candidate)
+            candidate_t = tuple(sorted(candidate))
+            if candidate_t not in set(candidates):
+                candidates.add(candidate_t)
+    candidates = list(map(set, candidates))
     return candidates
 
 
