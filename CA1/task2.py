@@ -4,9 +4,11 @@ from utils import (
     ItemsetsCountsType,
     ItemsetsType,
     TransactionsType,
+    log_ts,
 )
 
 
+@log_ts
 def get_sorted_items(tracts: TransactionsType) -> list:
     """get items from transactions and sort by support counting
 
@@ -38,6 +40,7 @@ def get_sorted_items(tracts: TransactionsType) -> list:
     return items
 
 
+@log_ts
 def convert_items2itemsets(items: list) -> ItemsetsType:
     itemsets = []
     for item in items:
@@ -45,6 +48,7 @@ def convert_items2itemsets(items: list) -> ItemsetsType:
     return itemsets
 
 
+@log_ts
 def gen_candidates(
     frequent_itemsets: ItemsetsType,
     items: list,
@@ -70,6 +74,7 @@ def gen_candidates(
     return candidates
 
 
+@log_ts
 def prune_candidates(
     candidates: ItemsetsType,
     prev_pruned_itemsets: ItemsetsType,
@@ -102,6 +107,7 @@ def prune_candidates(
     return not_pruned, pruned
 
 
+@log_ts
 def extract_itemsets(itemsets_counts: ItemsetsCountsType) -> ItemsetsType:
     def get_0th(s):
         return s[0]
@@ -109,6 +115,7 @@ def extract_itemsets(itemsets_counts: ItemsetsCountsType) -> ItemsetsType:
     return list(map(get_0th, itemsets_counts))
 
 
+@log_ts
 def get_frequent_itemsets(
     not_pruned: ItemsetsType, tracts: TransactionsType, min_supp: int
 ) -> tuple[ItemsetsCountsType, ItemsetsCountsType]:
@@ -133,9 +140,11 @@ def get_frequent_itemsets(
     return frequent_itemsets, non_frequent_itemsets
 
 
+@log_ts
 def apriori(tracts: TransactionsType, min_supp: int) -> ItemsetsCountsType:
+    step = 0
+    print(f"#{step = }")
     frequent_itemsets = []
-
     items = get_sorted_items(tracts)
     itemsets = convert_items2itemsets(items)
     fi, non_fi = get_frequent_itemsets(itemsets, tracts, min_supp)
@@ -143,6 +152,8 @@ def apriori(tracts: TransactionsType, min_supp: int) -> ItemsetsCountsType:
     pruned = []
 
     while len(fi) != 0:
+        step += 1
+        print(f"#{step = }")
         candidates = gen_candidates(extract_itemsets(fi), items)
         candidates, pruned = prune_candidates(candidates, pruned)
         fi, non_fi = get_frequent_itemsets(candidates, tracts, min_supp)
@@ -152,6 +163,7 @@ def apriori(tracts: TransactionsType, min_supp: int) -> ItemsetsCountsType:
     return frequent_itemsets
 
 
+@log_ts
 def show_itemsets(itemsets_counts: ItemsetsCountsType) -> None:
     sorted_item = []
     for fi, count in itemsets_counts:

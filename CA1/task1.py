@@ -1,6 +1,7 @@
-from utils import TEST_TRACTS
+from utils import TEST_TRACTS, log_ts
 
 
+@log_ts
 def calc_support(itemset: "set", tracts: "list[frozenset]") -> int:
     support = 0
     for tract in tracts:
