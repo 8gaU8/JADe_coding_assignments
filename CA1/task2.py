@@ -143,13 +143,17 @@ def get_frequent_itemsets(
 
 
 @log_ts
-def apriori(tracts: TransactionsType, min_supp: int) -> ItemsetsCountsType:
+def apriori(tracts: TransactionsType, min_supp: float) -> ItemsetsCountsType:
+    if min_supp >= 0 and min_supp < 1:
+        min_supp_int = int(min_supp * len(tracts))
+    else:
+        min_supp_int = int(min_supp)
     step = 0
     print(f"#{step = }")
     frequent_itemsets = []
     items = get_sorted_items(tracts)
     itemsets = convert_items2itemsets(items)
-    fi, non_fi = get_frequent_itemsets(itemsets, tracts, min_supp)
+    fi, non_fi = get_frequent_itemsets(itemsets, tracts, min_supp_int)
     frequent_itemsets.extend(fi)
     pruned = []
 
@@ -158,7 +162,7 @@ def apriori(tracts: TransactionsType, min_supp: int) -> ItemsetsCountsType:
         print(f"#{step = }")
         candidates = gen_candidates(extract_itemsets(fi), items)
         candidates, pruned = prune_candidates(candidates, pruned)
-        fi, non_fi = get_frequent_itemsets(candidates, tracts, min_supp)
+        fi, non_fi = get_frequent_itemsets(candidates, tracts, min_supp_int)
         pruned.extend(extract_itemsets(non_fi))
         frequent_itemsets.extend(fi)
 
