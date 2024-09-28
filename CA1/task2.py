@@ -27,7 +27,7 @@ def get_sorted_items(tracts: TransactionsType) -> list:
     # count support
     counts = []
     for item in unique_items:
-        sup = calc_support(set([item]), tracts)
+        sup = calc_support(frozenset([item]), tracts)
         counts.append((item, sup))
 
     # sort with support and get only items
@@ -67,12 +67,12 @@ def gen_candidates(
         for item in items:
             if item in fi:
                 continue
-            candidate = fi.copy()
-            candidate.add(item)
+            # candidate = fi.copy()
+            candidate = fi | frozenset((item,))
             candidate_t = tuple(sorted(candidate))
             if candidate_t not in set(candidates):
                 candidates.add(candidate_t)
-    candidates = list(map(set, candidates))
+    candidates = list(map(frozenset, candidates))
     return candidates
 
 
