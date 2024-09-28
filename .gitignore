@@ -1,4 +1,5 @@
 fim_resources.py
+*.ipynb
 .DS_Store
 *.info
 *.data
