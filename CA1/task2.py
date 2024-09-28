@@ -67,9 +67,9 @@ def gen_candidates(
         for item in items:
             if item in fi:
                 continue
-            # candidate = fi.copy()
-            candidate = fi | frozenset((item,))
-            candidate_t = tuple(sorted(candidate))
+            c = list(fi)
+            c.append(item)
+            candidate_t = tuple(sorted(c))
             if candidate_t not in set(candidates):
                 candidates.add(candidate_t)
     candidates = list(map(frozenset, candidates))
@@ -98,7 +98,7 @@ def prune_candidates(
     for cand in candidates:
         violate_flag = False
         for prev_pruned in prev_pruned_itemsets:
-            if prev_pruned <= cand:
+            if prev_pruned.issubset(cand):
                 violate_flag = True
                 break
         if violate_flag:
