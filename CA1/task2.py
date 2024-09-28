@@ -27,7 +27,7 @@ def get_sorted_items(tracts: TransactionsType) -> list:
     # count support
     counts = []
     for item in unique_items:
-        sup = calc_support(set([item]), tracts)
+        sup = calc_support(frozenset([item]), tracts)
         counts.append((item, sup))
 
     # sort with support and get only items
@@ -67,12 +67,12 @@ def gen_candidates(
         for item in items:
             if item in fi:
                 continue
-            candidate = fi.copy()
-            candidate.add(item)
-            candidate_t = tuple(sorted(candidate))
+            c = list(fi)
+            c.append(item)
+            candidate_t = tuple(sorted(c))
             if candidate_t not in set(candidates):
                 candidates.add(candidate_t)
-    candidates = list(map(set, candidates))
+    candidates = list(map(frozenset, candidates))
     return candidates
 
 
@@ -98,7 +98,7 @@ def prune_candidates(
     for cand in candidates:
         violate_flag = False
         for prev_pruned in prev_pruned_itemsets:
-            if prev_pruned <= cand:
+            if prev_pruned.issubset(cand):
                 violate_flag = True
                 break
         if violate_flag:

@@ -42,6 +42,12 @@ def log_ts(func):
     return wrapper
 
 
+class Node:
+    def __init__(self, items: list) -> None:
+        self.items = items
+        pass
+
+
 # small transactions from ex1,2,3
 TEST_TRACTS = [
     frozenset(["c", "d"]),
@@ -54,5 +60,5 @@ TEST_TRACTS = [
 
 # typings
 ItemsetsCountsType = list[tuple[set, int]]
-ItemsetsType = list[set]
+ItemsetsType = list[frozenset]
 TransactionsType = list[frozenset]
