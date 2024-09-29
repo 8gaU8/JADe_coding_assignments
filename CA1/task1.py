@@ -77,8 +77,11 @@ def main():
     itemset = frozenset([U.index(item) for item in itemset])
     support = calc_support(itemset, tracts)
     assert support == 2783
-    print(f"{support = }")
+    print(f"{support=}")
 
 
 if __name__ == "__main__":
     main()
+    print("consumed time of each function")
+    for func, (sec, called_nb) in TIME_STAMPS.items():
+        print(f"{func}, {sec:3.3f}[sec], {called_nb} times.")

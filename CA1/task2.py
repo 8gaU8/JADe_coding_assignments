@@ -3,7 +3,6 @@ from task1 import (
     ItemsetsType,
     TransactionsType,
     calc_support,
-    get_transactions,
     log_ts,
 )
 
@@ -42,9 +41,9 @@ def get_sorted_items(tracts: TransactionsType) -> list:
 
 @log_ts
 def convert_items2itemsets(items: list) -> ItemsetsType:
-    itemsets = []
+    itemsets: ItemsetsType = []
     for item in items:
-        itemsets.append(set([item]))
+        itemsets.append(frozenset([item]))
     return itemsets
 
 
@@ -179,7 +178,14 @@ def show_itemsets(itemsets_counts: ItemsetsCountsType) -> None:
 
 
 def main():
-    tracts, U = get_transactions("pizzas")
+    tracts = [
+        frozenset([3, 0]),
+        frozenset([1]),
+        frozenset([1, 2, 0]),
+        frozenset([2, 0]),
+        frozenset([1, 2, 3, 0]),
+        frozenset([1, 0]),
+    ]
     frequent_itemsets = apriori(tracts, 2)
     show_itemsets(frequent_itemsets)
     return frequent_itemsets
