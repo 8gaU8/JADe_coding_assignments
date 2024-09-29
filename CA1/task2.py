@@ -1,9 +1,9 @@
-from task1 import calc_support
-from utils import (
-    TEST_TRACTS,
+from task1 import (
     ItemsetsCountsType,
     ItemsetsType,
     TransactionsType,
+    calc_support,
+    get_transactions,
     log_ts,
 )
 
@@ -111,10 +111,7 @@ def prune_candidates(
 
 @log_ts
 def extract_itemsets(itemsets_counts: ItemsetsCountsType) -> ItemsetsType:
-    def get_0th(s):
-        return s[0]
-
-    return list(map(get_0th, itemsets_counts))
+    return list(map(lambda s: s[0], itemsets_counts))
 
 
 @log_ts
@@ -148,9 +145,10 @@ def apriori(tracts: TransactionsType, min_supp: float) -> ItemsetsCountsType:
         min_supp_int = int(min_supp * len(tracts))
     else:
         min_supp_int = int(min_supp)
+
     step = 0
     print(f"#{step = }")
-    frequent_itemsets = []
+    frequent_itemsets: ItemsetsCountsType = []
     items = get_sorted_items(tracts)
     itemsets = convert_items2itemsets(items)
     fi, non_fi = get_frequent_itemsets(itemsets, tracts, min_supp_int)
@@ -169,7 +167,6 @@ def apriori(tracts: TransactionsType, min_supp: float) -> ItemsetsCountsType:
     return frequent_itemsets
 
 
-@log_ts
 def show_itemsets(itemsets_counts: ItemsetsCountsType) -> None:
     sorted_item = []
     for fi, count in itemsets_counts:
@@ -182,8 +179,10 @@ def show_itemsets(itemsets_counts: ItemsetsCountsType) -> None:
 
 
 def main():
-    frequent_itemsets = apriori(TEST_TRACTS, 2)
+    tracts, U = get_transactions("pizzas")
+    frequent_itemsets = apriori(tracts, 2)
     show_itemsets(frequent_itemsets)
+    return frequent_itemsets
 
 
 if __name__ == "__main__":
