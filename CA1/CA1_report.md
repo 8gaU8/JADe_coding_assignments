@@ -1,5 +1,13 @@
 # Coding Assignments #1
 
+No collaboration.
+
+**Other materials**
+- https://docs.python.org/3/tutorial/datastructures.html#sets
+    - data structures of python
+- https://docs.python.org/3/library/stdtypes.html#frozenset
+    - python frozenset
+
 ## How to execute the program
 
 First, place `task1.py`, `task2.py`, `task3.py` in the `CA1_material` directory. Each python script can be executed with `python task*.py`. Python 3.9 or newer version is required to run. 
