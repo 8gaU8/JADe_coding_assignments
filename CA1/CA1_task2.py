@@ -1,4 +1,4 @@
-from task1 import (
+from CA1_task1 import (
     ItemsetsCountsType,
     ItemsetsType,
     TransactionsType,

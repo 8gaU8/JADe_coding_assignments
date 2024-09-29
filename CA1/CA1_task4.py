@@ -1,4 +1,4 @@
-from task1 import (
+from CA1_task1 import (
     ItemsetsCountsType,
     get_transactions,
     calc_support,
@@ -6,7 +6,7 @@ from task1 import (
     TIME_STAMPS,
     log_ts,
 )
-from task2 import apriori
+from CA1_task2 import apriori
 
 
 @log_ts

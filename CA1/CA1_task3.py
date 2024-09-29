@@ -1,8 +1,8 @@
 import pickle
 from datetime import datetime
 
-from task1 import TIME_STAMPS, get_transactions
-from task2 import apriori
+from CA1_task1 import TIME_STAMPS, get_transactions
+from CA1_task2 import apriori
 
 
 def main():
