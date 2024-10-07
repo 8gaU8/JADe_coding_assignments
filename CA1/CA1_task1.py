@@ -3,6 +3,7 @@ from datetime import datetime
 from fim_resources import DATASETS, load_data_txt, load_matrix, load_trans_txt
 
 TIME_STAMPS = dict()
+TIME_STAMPS["log_ts"] = (0, 0)
 
 
 def log_ts(func):
@@ -23,6 +24,11 @@ def log_ts(func):
 
         if erapsed_time > 0.1:
             print(f" {fn_name}:\t {erapsed_time:.4f}sec")
+        t, called = TIME_STAMPS["log_ts"]
+        TIME_STAMPS[fn_name] = (
+            t + (datetime.now() - start).total_seconds(),
+            called + 1,
+        )
         return ret
 
     return wrapper
@@ -80,8 +86,8 @@ def main():
     print(f"{support=}")
 
 
-if __name__ == "__main__":
-    main()
-    print("consumed time of each function")
-    for func, (sec, called_nb) in TIME_STAMPS.items():
-        print(f"{func}, {sec:3.3f}[sec], {called_nb} times.")
+# if __name__ == "__main__":
+#     main()
+#     print("consumed time of each function")
+#     for func, (sec, called_nb) in TIME_STAMPS.items():
+#         print(f"{func}, {sec:3.3f}[sec], {called_nb} times.")

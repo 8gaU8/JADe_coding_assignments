@@ -1,5 +1,6 @@
 import numpy as np
-from utils import TIME_STAMPS, log_ts
+
+from CA1.CA1_task1 import TIME_STAMPS, get_transactions, log_ts
 
 
 @log_ts
@@ -98,16 +99,44 @@ def prune_candidates(
     return next_candidates, list(next_pruned)
 
 
+class SupportCalculator:
+    def __init__(self) -> None:
+        self.set = False
+
+    @log_ts
+    def set_tracts(self, tracts: list[frozenset]) -> None:
+        if self.set:
+            return
+        items = get_unique_items(tracts)
+        self.item_map = {e: i for i, e in enumerate(items)}
+        tracts_mat = np.array(
+            [mk_onehot(tract, self.item_map) for tract in tracts],
+            dtype=np.int8,
+        )
+        self.tracts_mat = tracts_mat
+        self.set = True
+
+    @log_ts
+    def calc_support_np(self, itemset: frozenset) -> int:
+        onehot = mk_onehot(itemset, self.item_map)
+        idx = np.where(onehot == 1)[0]
+        item_row = self.tracts_mat[..., idx]
+        item_num = item_row.sum(axis=1)
+        return (item_num == idx.shape).sum()
+
+
+calc = SupportCalculator()
+
+
 @log_ts
 def main():
-    from utils import get_transactions
 
-    tracts, U = get_transactions("plants")
+    tracts, U = get_transactions("house")
+    min_supp = len(tracts) * 0.07
 
     items = get_unique_items(tracts)
     item_map = {e: i for i, e in enumerate(items)}
     tracts_mat = get_tracts_mat(tracts, item_map)
-    min_supp = 3000
 
     frequent_itemsets = []
     frequent_supp = []
@@ -124,7 +153,7 @@ def main():
     print(len(frequent_itemsets))
 
     pruned = []
-    while True:
+    while len(freq[0]) != 0:
         candidates = gen_candidates(freq[0], items_ary)
         candidates, pruned = prune_candidates(candidates, pruned)
 
